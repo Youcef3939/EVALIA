@@ -1,5 +1,5 @@
 import Groq from "groq-sdk";
-import { COMMUNICATION_PROMPT, NARRATIVE_PROMPT, PROBLEM_SOLUTION_PROMPT, AGGREGATOR_PROMPT } from "./prompts";
+import { SANITIZATION_PROMPT, COMMUNICATION_PROMPT, NARRATIVE_PROMPT, PROBLEM_SOLUTION_PROMPT, AGGREGATOR_PROMPT } from "./prompts";
 
 let groq: any;
 function getGroq() {
@@ -15,18 +15,33 @@ async function runEvaluator(prompt: string, text: string) {
     ],
     model: "llama-3.3-70b-versatile",
     response_format: { type: "json_object" },
-    temperature: 0.2,
+    temperature: 0.1,
   });
 
   const responseContent = completion.choices[0]?.message?.content || "{}";
   return JSON.parse(responseContent);
 }
 
+async function sanitizeText(rawText: string) {
+  const completion = await getGroq().chat.completions.create({
+    messages: [
+      { role: "system", content: SANITIZATION_PROMPT },
+      { role: "user", content: rawText }
+    ],
+    model: "llama-3.1-8b-instant",
+    temperature: 0.1,
+  });
+
+  return completion.choices[0]?.message?.content || rawText;
+}
+
 export async function runFullEvaluation(text: string) {
+  const cleanMarkdownText = await sanitizeText(text);
+
   const [commEval, narrEval, psEval] = await Promise.all([
-    runEvaluator(COMMUNICATION_PROMPT, text),
-    runEvaluator(NARRATIVE_PROMPT, text),
-    runEvaluator(PROBLEM_SOLUTION_PROMPT, text),
+    runEvaluator(COMMUNICATION_PROMPT, cleanMarkdownText),
+    runEvaluator(NARRATIVE_PROMPT, cleanMarkdownText),
+    runEvaluator(PROBLEM_SOLUTION_PROMPT, cleanMarkdownText),
   ]);
 
   const commScore = commEval.score || 0;
@@ -42,8 +57,8 @@ export async function runFullEvaluation(text: string) {
   else recommendation = "High Risk";
 
   const aggregatorInput = `
-PITCH DECK TEXT:
-${text}
+PITCH DECK TEXT (CLEANED):
+${cleanMarkdownText}
 
 ---
 ASSOCIATE EVALUATIONS:

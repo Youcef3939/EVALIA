@@ -1,3 +1,10 @@
+export const SANITIZATION_PROMPT = `you are a data cleaning assistant
+your job is to take raw, messy text extracted from a startup pitch deck PDF and sanitize it
+- remove layout debris, page numbers, weird symbols, and garbled text
+- format the text into clean Markdown with clear headers
+- group related information logically based on the slide markers ("--- SLIDE X ---")
+- output ONLY the clean Markdown text. Do NOT output JSON. Do NOT include any conversational filler`;
+
 export const COMMUNICATION_PROMPT = `you are a venture capital associate evaluating the communication quality of a startup pitch deck.
 evaluate the following text extracted from a pitch deck (slide boundaries are indicated by "--- SLIDE X ---")
 
