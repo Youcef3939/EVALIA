@@ -80,4 +80,8 @@ this project follows a simple but functional pipeline
 
 2. structured reasoning vs end to end ML training: instead of training a dedicated evaluation model, i used a prompt driven reasoning system with a structured rubric to simulate investor judgment efficently
 
-3. explainibility vs model complexity: i chose a rule guided evaluation framework over a black box scoring model to ensure interpretability of results for users 
+3. explainibility vs model complexity: i chose a rule guided evaluation framework over a black box scoring model to ensure interpretability of results for users
+
+## important
+
+if you hit the daily limit on the groq api key, feel free to make a new file **.env.local** in the root folder and put your own groq api key and they **npm run dev** and start **evalia**!
