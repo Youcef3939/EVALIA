@@ -78,6 +78,10 @@ this project follows a simple but functional pipeline
 
 <img width="1192" height="2008" alt="evalia-diagram1" src="https://github.com/user-attachments/assets/5435ea48-c95f-4cad-9b28-bc0008468b43" />
 
+## walkthrough
+
+https://drive.google.com/file/d/1UrYc9l6ZIRUp_vAI2VIlfQBxyWVm__kP/view?usp=sharing
+
 
 ## trade offs
 
