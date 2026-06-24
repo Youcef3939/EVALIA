@@ -14,31 +14,17 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<string> {
   const pdfParseRaw = require('pdf-parse');
   const parseFunc = typeof pdfParseRaw === 'function' ? pdfParseRaw : (pdfParseRaw.default || pdfParseRaw);
 
-  const renderPage = async (pageData: any) => {
-    const render_options = {
-      normalizeWhitespace: false,
-      disableCombineTextItems: false
-    };
+  const data = await parseFunc(buffer);
+  
+  const pages = data.text.split('\n\n');
+  const formattedText = pages.map((pageText: string, index: number) => {
+    return `\n\n--- SLIDE ${index + 1} ---\n\n${pageText.trim()}`;
+  }).join('\n');
 
-    return pageData.getTextContent(render_options)
-      .then((textContent: any) => {
-        let lastY, text = '';
-        for (let item of textContent.items) {
-          if (lastY == item.transform[5] || !lastY) {
-            text += item.str;
-          } else {
-            text += '\n' + item.str;
-          }
-          lastY = item.transform[5];
-        }
-        return `\n\n--- SLIDE ${pageData.pageIndex + 1} ---\n\n${text}`;
-      });
-  };
+  const pureText = data.text.trim();
+  if (pureText.length < 50) {
+    throw new Error("no readable text found. if this is an image-based or scanned PDF, please paste the text directly");
+  }
 
-  const options = {
-    pagerender: renderPage
-  };
-
-  const data = await parseFunc(buffer, options);
-  return data.text;
+  return formattedText;
 }
