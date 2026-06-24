@@ -69,6 +69,42 @@ Problem-Solution: ${JSON.stringify(psEval)}
 
   const aggEval = await runEvaluator(AGGREGATOR_PROMPT, aggregatorInput);
 
+  let decisionLabel = "";
+  if (irs >= 90) decisionLabel = "Proceed to Investment Discussion";
+  else if (irs >= 80) decisionLabel = "Proceed to Diligence";
+  else if (irs >= 70) decisionLabel = "Worth Another Meeting";
+  else if (irs >= 60) decisionLabel = "Needs Stronger Evidence";
+  else if (irs >= 40) decisionLabel = "Not Ready for Investment Review";
+  else decisionLabel = "Unconvincing Investment Case";
+
+  const dimensions = [
+    { name: "Communication Quality", score: commScore },
+    { name: "Narrative & Structure", score: narrScore },
+    { name: "Problem-Solution Fit", score: psScore }
+  ];
+  dimensions.sort((a, b) => b.score - a.score);
+  
+  const primaryDriverCategory = dimensions[0].name;
+  const primaryConcernCategory = dimensions[2].name;
+
+  let primaryDriver = "";
+  if (primaryDriverCategory === "Communication Quality") primaryDriver = "Exceptionally clear communication and high readability.";
+  else if (primaryDriverCategory === "Narrative & Structure") primaryDriver = "Convincing investment narrative and logical flow.";
+  else primaryDriver = "Strong problem-solution fit and market alignment.";
+
+  let primaryConcern = "";
+  let nextStep = "";
+  if (primaryConcernCategory === "Communication Quality") {
+    primaryConcern = "Unclear communication and dense presentation.";
+    nextStep = "Rewrite the deck to drastically reduce text density, simplify industry jargon, and improve overall readability.";
+  } else if (primaryConcernCategory === "Narrative & Structure") {
+    primaryConcern = "Weak narrative structure and missing sections.";
+    nextStep = "Reorganize the pitch into a clear sequence: Problem → Solution → Market → Business Model → Traction → Ask.";
+  } else {
+    primaryConcern = "Unconvincing problem-solution fit or market potential.";
+    nextStep = "Add concrete evidence demonstrating market demand, user traction, and a sharper definition of the problem being solved.";
+  }
+
   return {
     overallScore: irs,
     recommendation,
@@ -81,6 +117,12 @@ Problem-Solution: ${JSON.stringify(psEval)}
     keyStrengths: aggEval.keyStrengths || [],
     keyWeaknesses: aggEval.keyWeaknesses || [],
     risksAndConcerns: aggEval.risksAndConcerns || [],
-    investorInsights: aggEval.investorInsights || ""
+    investorInsights: aggEval.investorInsights || "",
+    decision: {
+      label: decisionLabel,
+      primaryDriver,
+      primaryConcern,
+      nextStep
+    }
   };
 }
