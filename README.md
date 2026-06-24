@@ -74,6 +74,11 @@ this project follows a simple but functional pipeline
 3. analysis : apply investor inspired evaluation framework
 4. output : structured investor report including strengths, weaknesses, risks and insights
 
+## diagram
+
+<img width="1192" height="2008" alt="evalia-diagram1" src="https://github.com/user-attachments/assets/5435ea48-c95f-4cad-9b28-bc0008468b43" />
+
+
 ## trade offs
 
 1. simplicity vs advanced multimodal understanding: i prioritized text based analysis over visual understanding ( charts, images, layouts ) to ensure a functional MVP within limited time
