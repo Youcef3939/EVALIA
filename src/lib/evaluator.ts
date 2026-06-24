@@ -73,9 +73,9 @@ Problem-Solution: ${JSON.stringify(psEval)}
     overallScore: irs,
     recommendation,
     breakdown: {
-      communication: commScore,
-      narrative: narrScore,
-      problemSolution: psScore
+      communication: commEval,
+      narrative: narrEval,
+      problemSolution: psEval
     },
     executiveSummary: aggEval.executiveSummary || "",
     keyStrengths: aggEval.keyStrengths || [],

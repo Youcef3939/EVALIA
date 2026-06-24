@@ -7,9 +7,9 @@ interface EvaluationResult {
   overallScore: number;
   recommendation: string;
   breakdown: {
-    communication: number;
-    narrative: number;
-    problemSolution: number;
+    communication: { score: number; signal: string; evidence: string[]; interpretation: string };
+    narrative: { score: number; signal: string; evidence: string[]; interpretation: string };
+    problemSolution: { score: number; signal: string; evidence: string[]; interpretation: string };
   };
   executiveSummary: string;
   keyStrengths: string[];
@@ -38,11 +38,11 @@ export default function Home() {
     setResult(null);
 
     if (activeTab === "pdf" && !file) {
-      setError("Please select a PDF file.");
+      setError("Please select a PDF file");
       return;
     }
     if (activeTab === "text" && !text.trim()) {
-      setError("Please enter pitch deck text.");
+      setError("Please enter pitch deck text");
       return;
     }
 
@@ -64,7 +64,7 @@ export default function Home() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Failed to evaluate pitch deck.");
+        throw new Error(data.error || "Failed to evaluate pitch deck");
       }
 
       setResult(data);
@@ -90,7 +90,7 @@ export default function Home() {
             Evalia
           </h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            AI-powered pitch deck evaluation simulating real venture capital reasoning.
+            AI-powered pitch deck evaluation simulating real venture capital reasoning
           </p>
         </header>
 
@@ -212,33 +212,44 @@ export default function Home() {
                 Evaluation Breakdown
               </h3>
               <div className="grid md:grid-cols-3 gap-8">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-medium">
-                    <span className="text-slate-700">Communication (25%)</span>
-                    <span className={getScoreColor(result.breakdown.communication)}>{result.breakdown.communication}</span>
+                {[
+                  { label: "Communication", weight: "25%", data: result.breakdown.communication },
+                  { label: "Narrative", weight: "35%", data: result.breakdown.narrative },
+                  { label: "Problem-Solution", weight: "40%", data: result.breakdown.problemSolution }
+                ].map((item) => (
+                  <div key={item.label} className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm font-medium">
+                        <span className="text-slate-700">{item.label} ({item.weight})</span>
+                        <span className={getScoreColor(item.data.score || 0)}>{item.data.score || 0}</span>
+                      </div>
+                      <div className="w-full bg-slate-100 rounded-full h-2">
+                        <div className="bg-slate-900 h-2 rounded-full" style={{ width: `${item.data.score || 0}%` }}></div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl text-sm space-y-3 border border-slate-100">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-slate-800">Signal:</span>
+                        <span className={`px-2 py-0.5 rounded-md text-xs font-bold ${
+                          item.data.signal?.toLowerCase().includes('strong') ? 'bg-emerald-100 text-emerald-700' :
+                          item.data.signal?.toLowerCase().includes('weak') ? 'bg-red-100 text-red-700' :
+                          'bg-amber-100 text-amber-700'
+                        }`}>
+                          {item.data.signal || "Unknown"}
+                        </span>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="font-semibold text-slate-800 text-xs uppercase tracking-wider">Evidence</span>
+                        <ul className="list-disc pl-4 space-y-1.5 text-slate-600">
+                          {item.data.evidence?.map((e: string, i: number) => <li key={i} className="leading-relaxed">{e}</li>)}
+                        </ul>
+                      </div>
+                      <div className="pt-3 border-t border-slate-200">
+                        <p className="text-slate-600 italic leading-relaxed">"{item.data.interpretation}"</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2">
-                    <div className="bg-slate-900 h-2 rounded-full" style={{ width: `${result.breakdown.communication}%` }}></div>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-medium">
-                    <span className="text-slate-700">Narrative (35%)</span>
-                    <span className={getScoreColor(result.breakdown.narrative)}>{result.breakdown.narrative}</span>
-                  </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2">
-                    <div className="bg-slate-900 h-2 rounded-full" style={{ width: `${result.breakdown.narrative}%` }}></div>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm font-medium">
-                    <span className="text-slate-700">Problem-Solution (40%)</span>
-                    <span className={getScoreColor(result.breakdown.problemSolution)}>{result.breakdown.problemSolution}</span>
-                  </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2">
-                    <div className="bg-slate-900 h-2 rounded-full" style={{ width: `${result.breakdown.problemSolution}%` }}></div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
