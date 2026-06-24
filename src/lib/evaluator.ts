@@ -95,14 +95,14 @@ Problem-Solution: ${JSON.stringify(psEval)}
   let primaryConcern = "";
   let nextStep = "";
   if (primaryConcernCategory === "Communication Quality") {
-    primaryConcern = "Unclear communication and dense presentation.";
-    nextStep = "Rewrite the deck to drastically reduce text density, simplify industry jargon, and improve overall readability.";
+    primaryConcern = "Clarity gap: Dense presentation obscures the core value proposition.";
+    nextStep = "Synthesize the core message into plain language and aggressively cut text density to ensure critical metrics stand out immediately.";
   } else if (primaryConcernCategory === "Narrative & Structure") {
-    primaryConcern = "Weak narrative structure and missing sections.";
-    nextStep = "Reorganize the pitch into a clear sequence: Problem → Solution → Market → Business Model → Traction → Ask.";
+    primaryConcern = "Conviction gap: Disconnected logical flow fails to build a compelling investment case.";
+    nextStep = "Bridge the narrative disconnect between the identified problem and your go-to-market mechanics so investors can clearly see the path to scale.";
   } else {
-    primaryConcern = "Unconvincing problem-solution fit or market potential.";
-    nextStep = "Add concrete evidence demonstrating market demand, user traction, and a sharper definition of the problem being solved.";
+    primaryConcern = "Scalability gap: Problem severity and market demand lack sufficient empirical backing.";
+    nextStep = "Lead with hard data and user traction that proves an urgent customer pain before explaining the technical mechanics of the solution.";
   }
 
   return {
