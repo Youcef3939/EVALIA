@@ -16,6 +16,12 @@ interface EvaluationResult {
   keyWeaknesses: string[];
   risksAndConcerns: string[];
   investorInsights: string;
+  decision?: {
+    label: string;
+    primaryDriver: string;
+    primaryConcern: string;
+    nextStep: string;
+  };
 }
 
 export default function Home() {
@@ -311,6 +317,35 @@ export default function Home() {
                 </p>
               </div>
             </div>
+
+            {result.decision && (
+              <div className="bg-white text-slate-900 p-8 rounded-3xl shadow-xl border border-slate-200 space-y-6 text-center transform hover:scale-[1.01] transition-transform">
+                <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-full mb-2">
+                  <Target className="w-5 h-5 text-indigo-600" />
+                  <span className="font-semibold text-indigo-700 tracking-wide uppercase text-sm">Final Decision</span>
+                </div>
+                
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900">
+                  {result.decision.label}
+                </h2>
+                
+                <div className="grid md:grid-cols-2 gap-4 mt-8 pt-8 border-t border-slate-100 text-left">
+                  <div className="bg-emerald-50/50 border border-emerald-100 p-5 rounded-2xl">
+                    <div className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-2">Primary Driver</div>
+                    <p className="text-slate-700 text-sm leading-relaxed">{result.decision.primaryDriver}</p>
+                  </div>
+                  <div className="bg-rose-50/50 border border-rose-100 p-5 rounded-2xl">
+                    <div className="text-xs font-bold text-rose-700 uppercase tracking-wider mb-2">Primary Concern</div>
+                    <p className="text-slate-700 text-sm leading-relaxed">{result.decision.primaryConcern}</p>
+                  </div>
+                </div>
+
+                <div className="bg-indigo-50 border border-indigo-100 p-5 rounded-2xl mt-4 text-left">
+                  <div className="text-xs font-bold text-indigo-700 uppercase tracking-wider mb-2">Suggested Next Step</div>
+                  <p className="text-slate-700 text-sm leading-relaxed font-medium">{result.decision.nextStep}</p>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
