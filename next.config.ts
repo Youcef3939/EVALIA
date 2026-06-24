@@ -4,4 +4,4 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["pdf-parse"],
 };
 
-export default nextConfig;
+export default nextConfig; 
