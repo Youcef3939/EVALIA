@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { extractTextFromPDF } from "@/lib/pdfExtractor";
 import { runFullEvaluation } from "@/lib/evaluator";
+import crypto from "crypto";
+
+const evaluationCache = new Map<string, any>();
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,7 +28,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "could not extract text from the provided input" }, { status: 400 });
     }
 
+    const hashKey = crypto.createHash('sha256').update(textToEvaluate).digest('hex');
+
+    if (evaluationCache.has(hashKey)) {
+      console.log(`Cache hit for deck hash: ${hashKey}`);
+      return NextResponse.json(evaluationCache.get(hashKey));
+    }
+
+    console.log(`Cache miss for deck hash: ${hashKey}. Running full evaluation...`);
     const evaluationResult = await runFullEvaluation(textToEvaluate);
+
+    evaluationCache.set(hashKey, evaluationResult);
 
     return NextResponse.json(evaluationResult);
 
