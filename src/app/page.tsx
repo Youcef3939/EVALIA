@@ -285,28 +285,28 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="bg-slate-900 text-white p-6 md:p-8 rounded-2xl shadow-xl space-y-8">
+            <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-8">
               <div>
-                <div className="flex items-center gap-2 mb-4 text-amber-400 font-bold">
+                <div className="flex items-center gap-2 mb-4 text-rose-800 font-bold">
                   <AlertCircle className="w-5 h-5" />
                   Critical Risks & Concerns
                 </div>
                 <ul className="grid md:grid-cols-2 gap-4">
                   {result.risksAndConcerns.map((r, i) => (
-                    <li key={i} className="flex gap-3 text-sm text-slate-300 leading-relaxed bg-slate-800/50 p-4 rounded-xl">
-                      <span className="text-amber-400 font-bold">•</span>
+                    <li key={i} className="flex gap-3 text-sm text-slate-700 leading-relaxed bg-rose-50/50 p-4 rounded-xl border border-rose-100">
+                      <span className="text-rose-500 font-bold">•</span>
                       {r}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="pt-6 border-t border-slate-700">
-                <div className="flex items-center gap-2 mb-4 text-blue-400 font-bold">
+              <div className="pt-6 border-t border-slate-100">
+                <div className="flex items-center gap-2 mb-4 text-blue-600 font-bold">
                   <Zap className="w-5 h-5" />
                   Investor Insights
                 </div>
-                <p className="text-slate-300 leading-relaxed bg-slate-800/50 p-5 rounded-xl border border-slate-700/50">
+                <p className="text-slate-700 leading-relaxed bg-blue-50/50 p-5 rounded-xl border border-blue-100">
                   {result.investorInsights}
                 </p>
               </div>
