@@ -18,10 +18,16 @@ focus on:
 return a JSON object strictly matching this schema:
 {
   "score": <number 0-100>,
-  "reasoning": "<short explanation of the score>",
-  "strengths": ["<strength 1>", ...],
-  "weaknesses": ["<weakness 1>", ...]
-}`;
+  "signal": "<Strong | Moderate | Weak>",
+  "evidence": ["<specific extracted fact/quote 1>", "<specific extracted fact/quote 2>"],
+  "interpretation": "<one short investor interpretation sentence explaining the impact of this score>"
+}
+
+constraints:
+- evidence must be exact or heavily based on the pitch deck content (no hallucinated specifics)
+- keep each bullet point short and concrete
+- avoid generic statements like "poor structure" without justification
+- there MUST be exactly 2 evidence bullets`;
 
 export const NARRATIVE_PROMPT = `you are a venture capital associate evaluating the narrative and storytelling of a startup pitch deck.
 evaluate the following text extracted from a pitch deck (slide boundaries are indicated by "--- SLIDE X ---")
@@ -36,11 +42,16 @@ focus on:
 return a JSON object strictly matching this schema:
 {
   "score": <number 0-100>,
-  "reasoning": "<short explanation of the score>",
-  "missing_sections": ["<section 1>", ...],
-  "strengths": ["<strength 1>", ...],
-  "weaknesses": ["<weakness 1>", ...]
-}`;
+  "signal": "<Strong | Moderate | Weak>",
+  "evidence": ["<specific extracted fact/quote 1>", "<specific extracted fact/quote 2>"],
+  "interpretation": "<one short investor interpretation sentence explaining the impact of this score>"
+}
+
+constraints:
+- evidence must be exact or heavily based on the pitch deck content (no hallucinated specifics)
+- keep each bullet point short and concrete
+- avoid generic statements like "poor structure" without justification
+- there MUST be exactly 2 evidence bullets`;
 
 export const PROBLEM_SOLUTION_PROMPT = `you are a venture capital associate evaluating the Problem-Solution fit of a startup pitch deck.
 evaluate the following text extracted from a pitch deck (slide boundaries are indicated by "--- SLIDE X ---")
@@ -53,10 +64,16 @@ focus on:
 return a JSON object strictly matching this schema:
 {
   "score": <number 0-100>,
-  "reasoning": "<short explanation of the score>",
-  "strengths": ["<strength 1>", ...],
-  "weaknesses": ["<weakness 1>", ...]
-}`;
+  "signal": "<Strong | Moderate | Weak>",
+  "evidence": ["<specific extracted fact/quote 1>", "<specific extracted fact/quote 2>"],
+  "interpretation": "<one short investor interpretation sentence explaining the impact of this score>"
+}
+
+constraints:
+- evidence must be exact or heavily based on the pitch deck content (no hallucinated specifics)
+- keep each bullet point short and concrete
+- avoid generic statements like "poor structure" without justification
+- there MUST be exactly 2 evidence bullets`;
 
 export const AGGREGATOR_PROMPT = `you are a senior Venture Capital Partner finalizing an investment memo.
 you will be provided with the startup's pitch deck text, and the evaluations from your associates on Communication, Narrative, and Problem-Solution fit
